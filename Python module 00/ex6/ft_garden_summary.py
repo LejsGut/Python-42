@@ -1,0 +1,5 @@
+name = input("Enter garden name: ")
+amount = int(input("Enter number of plants: "))
+print(f"Garden: {name}")
+print(f"Plants: {amount}")
+print("Status: Growing well!")
