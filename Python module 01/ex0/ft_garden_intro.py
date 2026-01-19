@@ -3,11 +3,10 @@ class Plant:
         self.name = name
         self.height = height
         self.age = age
-        pass
 
-rose = Plant("rose", "15cm", "2 months")
 
 if __name__ == "__main__":
+    rose = Plant("rose", "15cm", "2 months")
     print("=== Welcome to My Garden ===")
     print(f"Plant: {rose.name}")
     print(f"Height: {rose.height}")

@@ -5,6 +5,7 @@ class Plant:
         self.age = age
         pass
 
+
 rose = Plant("Rose:", "15cm", "1 week")
 tulip = Plant("Tulip:", "25cm", "1 weeks")
 orchid = Plant("Orchid:", "35cm", "3 weeks")

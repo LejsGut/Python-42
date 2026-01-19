@@ -6,9 +6,10 @@ class Plant:
         self.amount_plants = amount_plants
 
     def info(self):
-        print(f"Created: {self.name} ({self.starting_height}cm, {self.starting_age} days)")
+        print(f"Created: {self.name} ({self.starting_height}cm, "
+              f"{self.starting_age} days)")
 
-    def how_many_created(self, count):
+    def how_many_created(self):
         print(f"Total plants created: {count}")
 
 
@@ -25,6 +26,4 @@ while count < Rose.amount_plants:
     plants[count].info()
     count += 1
 print("")
-Rose.how_many_created(count)
-
-
+Rose.how_many_created()
