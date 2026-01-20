@@ -1,13 +1,16 @@
 class Gardenmanager:
-    def __init__(self, name, manager):
+    def __init__(self, gardener):
+        self.gardener = gardener
+
+
+class Node:
+    def __init__(self, gardener, name, manager, bloom, prize):
+        self.gardener = gardener
         self.name = name
-        self.manager = []
-
-    def new_user(self, new_user):
-        self.manager.append(new_user)
-
-    def del_user(self):
-        self.manager.remove(name)
+        self.manager = manager
+        self.bloom = False
+        self.prize = prize
+        self.next = None
 
 
 class Alice:

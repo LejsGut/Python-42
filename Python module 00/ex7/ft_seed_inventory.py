@@ -1,4 +1,4 @@
-def ft_seed_inventory(seed_type:    str, quantity:  int, unit:  str):
+def ft_seed_inventory(seed_type: str, quantity: int, unit: str):
     if unit == "packets":
         print(f"{seed_type} seeds: {quantity} {unit} available")
     elif unit == "grams":
@@ -7,4 +7,5 @@ def ft_seed_inventory(seed_type:    str, quantity:  int, unit:  str):
         print(f"{seed_type} seeds: covers {quantity} {unit}")
 
 
-ft_seed_inventory("tomato", 15, "packets")
+if __name__ == "__main__":
+    ft_seed_inventory("tomato", 15, "packets")
