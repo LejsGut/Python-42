@@ -25,14 +25,17 @@ class Gardenmanager:
             return False
         return True
 
-    def gardens_managed(self, start_node):
+    def gardens_managed(self, start_node, gardener):
         count = 0
         current = start_node
-        while current is not None:
+        if current is None or current.gardener:
+            count += 1
+        while current is not None and current.gardener == gardener:
             if current.gardener == self.gardener:
-                count += 1
-            current = current.next
-        return count
+                current = current.next
+        if current is not current.gardener:
+            count += 1
+            return count
 
 
 class Node:
@@ -133,5 +136,4 @@ alice_score = alice_manager.garden_score(node1)
 bob_score = bob_manager.garden_score(node4)
 
 print(f"\nGarden scores - Alice: {alice_score}, Bob: {bob_score}")
-
-print(f"Total gardens managed: {alice_manager.gardens_managed(node1)}")
+print(f"Total gardens managed: {alice_manager.gardens_managed(node1, 'Alice')}")
