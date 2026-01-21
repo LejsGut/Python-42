@@ -6,10 +6,10 @@ class Gardenmanager:
         current = start_node
         score = 0
         while current is not None and current.gardener == self.gardener:
-            if current.bloom is True and current.prize > 0:
+            if current.bloom is True and current.prize == 0:
                 score += 100
-            elif current.bloom:
-                score += 100
+            elif current.bloom is True and current.prize > 0:
+                score += 10
             else:
                 score += 20
             current = current.next
