@@ -2,11 +2,17 @@ class Gardenmanager:
     def __init__(self, gardener):
         self.gardener = gardener
 
-    def calculate_score(self):
-        score = self.height
-        if self.bloom:
-            score += 50
-        score += self.prize * 10
+    def garden_score(self, start_node):
+        current = start_node
+        score = 0
+        while current is not None and current.gardener == self.gardener:
+            if current.bloom is True and current.prize > 0:
+                score += 100
+            elif current.bloom:
+                score += 100
+            else:
+                score += 20
+            current = current.next
         return score
 
     def grow(self):
@@ -40,7 +46,7 @@ node2 = Node("Alice", "Rose", Gardenmanager("Alice"), True, 0, 1, 1)
 node3 = Node("Alice", "Sunflower", Gardenmanager("Alice"), True, 10, 1, 1)
 node4 = Node("Bob", "Pine Tree", Gardenmanager("Bob"), False, 0, 1, 1)
 node5 = Node("Bob", "Daisy", Gardenmanager("Bob"), True, 0, 1, 1)
-node6 = Node("Bob", "Tulip", Gardenmanager("Bob"), True, 5, 1, 1)
+node6 = Node("Bob", "Tulip", Gardenmanager("Bob"), True, 0, 1, 1)
 
 # Linked List
 node1.next = node2
@@ -111,11 +117,13 @@ while current is not None and current.gardener == "Alice":
     current = current.next
 print(f"Height validation test: {height_valid}")
 
+alice_manager = Gardenmanager("Alice")
+bob_manager = Gardenmanager("Bob")
 
-# print(
-#     f"\nGarden scores - Alice: {Gardenmanager.calculate_score(Node.)},"
-#     f" Bob: {Gardenmanager.calculate_score()}"
-# )
+alice_score = alice_manager.garden_score(node1)
+bob_score = bob_manager.garden_score(node4)
+
+print(f"\nGarden scores - Alice: {alice_score}, Bob: {bob_score}")
 
 # CodeCultivation Object-Oriented Garden Systems
 # Example:
