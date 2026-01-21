@@ -25,6 +25,15 @@ class Gardenmanager:
             return False
         return True
 
+    def gardens_managed(self, start_node):
+        count = 0
+        current = start_node
+        while current is not None:
+            if current.gardener == self.gardener:
+                count += 1
+            current = current.next
+        return count
+
 
 class Node:
     def __init__(
@@ -125,24 +134,4 @@ bob_score = bob_manager.garden_score(node4)
 
 print(f"\nGarden scores - Alice: {alice_score}, Bob: {bob_score}")
 
-# CodeCultivation Object-Oriented Garden Systems
-# Example:
-# $> python3 ft_garden_analytics.py
-# === Garden Management System Demo ===
-# Added Oak Tree to Alice's garden
-# Added Rose to Alice's garden
-# Added Sunflower to Alice's garden
-# Alice is helping all plants grow...
-# Oak Tree grew 1cm
-# Rose grew 1cm
-# Sunflower grew 1cm
-# === Alice's Garden Report ===
-# Plants in garden:
-# - Oak Tree: 101cm
-# - Rose: 26cm, red flowers (blooming)
-# - Sunflower: 51cm, yellow flowers (blooming), Prize points: 10
-# Plants added: 3, Total growth: 3cm
-# Plant types: 1 regular, 1 flowering, 1 prize flowers
-# Height validation test: True
-# Garden scores - Alice: 218, Bob: 92
-# Total gardens managed: 2
+print(f"Total gardens managed: {alice_manager.gardens_managed(node1)}")
