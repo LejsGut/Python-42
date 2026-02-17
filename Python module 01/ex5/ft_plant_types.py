@@ -7,7 +7,7 @@ class Plant:
     def info(self):
         print(
             f"{self.name} ({self.__class__.__name__}): "
-            "f{self.height}cm, {self.age} days, ",
+            f"{self.height}cm, {self.age} days, ",
             end="",
         )
 
@@ -18,12 +18,10 @@ class Flower(Plant):
         super().__init__(name, height, age)
         self.colour = colour
 
-    def bloom(self):
-        print(f"{self.name} is blooming beautifully!")
-
     def info(self):
         super().info()
         print(f"{self.colour}")
+        print(f"{self.name} is blooming beautifully!")
 
 
 class Vegetable(Plant):
@@ -47,7 +45,7 @@ class Tree(Plant):
     def info(self):
         super().info()
         print(f"{self.trunk_diameter}cm diameter")
-        print(f"{self.name} provides {self.shade} square " "fmeters of shade")
+        print(f"{self.name} provides {self.shade} square " "meters of shade")
 
 
 def main() -> None:

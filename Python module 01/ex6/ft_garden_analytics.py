@@ -52,7 +52,6 @@ class Node:
         self.next = None
 
 
-# Nodes (Pflanzen)
 node1 = Node("Alice", "Oak Tree", Gardenmanager("Alice"), False, 0, 1, 1)
 node2 = Node("Alice", "Rose", Gardenmanager("Alice"), True, 0, 1, 1)
 node3 = Node("Alice", "Sunflower", Gardenmanager("Alice"), True, 10, 1, 1)
@@ -60,7 +59,7 @@ node4 = Node("Bob", "Pine Tree", Gardenmanager("Bob"), False, 0, 1, 1)
 node5 = Node("Bob", "Daisy", Gardenmanager("Bob"), True, 0, 1, 1)
 node6 = Node("Bob", "Tulip", Gardenmanager("Bob"), True, 0, 1, 1)
 
-# Linked List
+
 node1.next = node2
 node2.next = node3
 node3.next = node4
@@ -70,7 +69,7 @@ node5.next = node6
 
 print("=== Garden Management System Demo ===\n")
 
-# Pflanzen hinzufügen
+
 current = node1
 while current is not None:
     print(f"Added {current.name} to {current.gardener}'s garden")
@@ -78,7 +77,7 @@ while current is not None:
 
 print("\nAlice is helping all plants grow...")
 
-# Wachstum
+
 current = node1
 while current is not None and current.gardener == "Alice":
     growth = Gardenmanager.grow(current)
@@ -102,7 +101,7 @@ while current is not None and current.gardener == "Alice":
     if current.bloom and current.prize > 0:
         prize_count += 1
         print(
-            f"- {current.name}: {current.height}cm, yellow flowers (blooming), "
+            f"- {current.name}: {current.height}cm, yellow flowers (blooming),"
             f"Prize points: {current.prize}"
         )
     elif current.bloom:
@@ -119,7 +118,7 @@ print(
     f"Plant types: {regular_count} regular, "
     f"{flowering_count} flowering, {prize_count} prize flowers"
 )
-# Gartenbewertung
+
 current = node1
 height_valid = True
 while current is not None and current.gardener == "Alice":
@@ -136,4 +135,5 @@ alice_score = alice_manager.garden_score(node1)
 bob_score = bob_manager.garden_score(node4)
 
 print(f"\nGarden scores - Alice: {alice_score}, Bob: {bob_score}")
-print(f"Total gardens managed: {alice_manager.gardens_managed(node1, 'Alice')}")
+
+print(f"Total gardens managed: {alice_manager.gardens_managed(node1)}")
