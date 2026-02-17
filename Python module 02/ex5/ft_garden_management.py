@@ -31,12 +31,16 @@ class Gardenmanager:
                         raise TypeError("Invalid plant type!")
 
 
-                    print(f"Watering {plant}")
-                    Gardenmanager.water_tank -= 1
-                    if Gardenmanager.water_tank <= 0:
-                        raise GardenError("Not enough water in tank")
+                    try:
+                        if Gardenmanager.water_tank <= 0:
+                            raise GardenError("Not enough water in tank")
+                        print(f"Watering {plant}")
+                        Gardenmanager.water_tank -= 1
+                    except GardenError as e:
+                        print(f"Error: {e}")
                         Gardenmanager.water_tank += 1
                         print("System recovered and coninuing...")
+                        continue
 
                     for p in self.plants:
                         if p["plant"] == plant:
@@ -100,7 +104,7 @@ def test_garden_manager():
     except (TypeError, ValueError) as e:
         print(f"Error: {e}")
 
-    print
+    print("Garden manager test completed!")
 
 def main():
     test_garden_manager()
