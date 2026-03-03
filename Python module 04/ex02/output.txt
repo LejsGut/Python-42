@@ -1,0 +1,7 @@
+=== CYBER ARCHIVES - COMMUNICATION SYSTEM ===
+
+Input Stream Active. Enter archivist ID: 
+Input Stream active. Enter status report: 
+[STANDARD] Archive status from ARCH_7742: All systems nominal
+[STANDARD] Data transmission comlete
+Three-channel communication test succesful
