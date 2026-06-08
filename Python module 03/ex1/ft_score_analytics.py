@@ -1,38 +1,40 @@
 import sys
 
-def main(argv: list[int]) -> None:
 
-    ft_score_analytics = argv[0]
-    print("=== Player Score Analytics ===")
-
-    if(len(argv) == 1):
-        print("No arguments provided!")
-        print(f"Program name: ft_score_analytics")
-        print("Total arguments: 1")
-        return 
+def argcount() -> list[int] | None:
+    if len(sys.argv) == 1:
+        print("No scores provided. Usage: python3 ft_score_analytics.py"
+              " <score1> <score2> ...")
+        return None
     scores = []
-    counter = 1
-    for i in argv[1: ]:
+    for j in range(1, len(sys.argv)):
         try:
-            num = int(i)
+            scores.append(int(sys.argv[j]))
         except ValueError:
-            print(f"Invalid score: {i}")
-            print("Usage: python3 ft_score_analytics.py <score1> <score2> ...")
-            return
-        else:
-            scores.append(num)
-        counter += 1
+            print(f"Invalid parameter: '{sys.argv[j]}'")
+    if not scores:
+        print("No scores provided. Usage: python3 ft_score_analytics.py"
+              " <score1> <score2> ...")
+        return None
+    return scores
 
-    res = sum(scores)
-    average = res / (counter - 1)
 
+def stats(scores: list[int]) -> None:
     print(f"Scores processed: {scores}")
-    print(f"Total players: {counter - 1}")
-    print(f"Total score: {res}")
-    print(f"Average score: {average}")
+    print(f"Total players: {len(scores)}")
+    print(f"Total score: {sum(scores)}")
+    print(f"Average score: {sum(scores) / len(scores)}")
     print(f"High score: {max(scores)}")
     print(f"Low score: {min(scores)}")
-    print(f"Score range {max(scores) - min(scores)}")
+    print(f"Score range: {max(scores) - min(scores)}")
+
+
+def main() -> None:
+    print("=== Player Score Analytics ===")
+    scores = argcount()
+    if scores is not None:
+        stats(scores)
+
 
 if __name__ == "__main__":
-    main(sys.argv)
+    main()

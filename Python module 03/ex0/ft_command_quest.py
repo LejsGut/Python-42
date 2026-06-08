@@ -1,25 +1,21 @@
 import sys
 
-def main(argv: list[str]) -> None:
-    print("Command Quest")
-
-    ft_command_quest = argv[0]
-
-    if(len(argv) == 1):
+def argcount() -> None:
+    if len(sys.argv) == 1:
         print("No arguments provided!")
-        print(f"Program name: ft_command_quest")
         print("Total arguments: 1")
-        return
+    else:    
+        print(f"Arguments received: {len(sys.argv) - 1}")
+        for i in range(1, len(sys.argv)):
+            print(f"Argument {i}: {sys.argv[i]}")
+        print(f"Total Arguments: {len(sys.argv)}")
 
-    counter = 1
-    for i in argv[1:]:
-        print(f"Argument {counter}: {i}")
-        counter += 1
-    
-    print(f"Total amount of arguments is {counter}")
+
+def main():
+    print("=== Command Quest ===")
+    print(f"Program name: {sys.argv[0]}")
+    argcount()
+
 
 if __name__ == "__main__":
-    main(sys.argv)
-#python3 ft_command_quest.py "hello send help" "" 
-#python3 ft_command_quest.py "hello send help" "  1  2"
-#python3 ft_command_quest.py hello send help
+    main()
