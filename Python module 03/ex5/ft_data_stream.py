@@ -1,65 +1,37 @@
-import time
+import typing
 from typing import Generator
+import random
 
-player = ["alice", "bob", "charlie"]
-level = [5, 12, 8]
-achievements = ["killed monster", "found treasure", "leveled up"]
 
-start = time.time()
-def event_stream(n):
-    for count in range(n):
-        if count == 3:
-            yield "..."
-            return
-        index = count % len(player)
-        yield f"Event {count + 1}: Player {player[index]} (level {level[index]}) {achievements[index]}" 
-end = time.time()
-def analytics(events, player):
-    print(f"Total events processed: {events}")
-    print(f"High-level players (10+): {events / player}")
-    print(f"Treasure events: {(events / player) / 3}")
-    print(f"Level-up events: {(events / player) / 3}")
+def gen_event() -> Generator[tuple, None, None]:
+    players = ["alice", "bob", "charlie", "dylan"]
+    actions = ["move", "run", "climb", "swim", "grab"]
+    while True:
+        yield (random.choice(players), random.choice(actions))
 
-def fibonacci(num):
-    x, y = 0, 1
-    for i in range(num):
-        yield x
-        x, y = y, x+y
-def primes(n):
-    count = 0
-    number = 2
+def consume_event(events: list) -> Generator[tuple, None, None]:
+    while len(events) > 0:
+        index = random.randint(0, len(events) - 1)
+        yield events.pop(index)
 
-    while count < n:
-        is_prime = True
-        for i in range(2, number):
-            if number % i == 0:
-                is_prime = False
-                break
-        if is_prime:
-            yield number
-            count += 1
-        number += 1
 
-pro_time = end - start
 def main():
-    print("=== Game Data Stream Processor ===")
-    print("Processing 1000 game events...")
-    for event in event_stream(1000):
-        print(event)
-    print("=== Stream Analytics ===")
-    analytics(1000, 3)
-    print()
-    print("Memory usage: Constant (streaming)")
-    print(f"Processing time {pro_time:.9f}")
-    print("=== Generator Demonstration")
-    print("Fibonacci sequence (first 10):", end=" ")
-    for line in fibonacci(10):
-        print(line, end=" ")
-    print()
-    print("Prime numbers (first 5):", end=" ")
-    for p in primes(5):
-        print(p, end=" ")
-    print()
+    print("=== Game Data Stream Processor")
+    liist = []
+    g = gen_event()
+    for _ in range(1000):
+        event = next(g)
+        print(f"Event {_ + 1}: Player {event[0]} did action {event[1]}")
+    for _ in range(10):
+        event = next(g)
+        liist.append(event)
+    print(f"Last 10 events: {liist}")
+    for event in consume_event(liist):
+        print(f"Got event from list: {event}")
+        print(f"Remains in list: {liist}")
+
+    
+
 
 if __name__ == "__main__":
     main()

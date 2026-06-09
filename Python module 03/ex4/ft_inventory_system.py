@@ -1,103 +1,49 @@
-import  sys
-import math
+import sys
 
-def main(argv: list[str]) -> None:
-    print("=== Inventory System Analysis ===")
-    inventory: dict[str, int] = {}
 
-    for token in argv[1:]:
-        if ":" not in token:
-            print(f"Skipping invalid token (missing ':'): {token}")
+def parse_inventory() -> dict:
+    inventory = {}
+    for arg in sys.argv[1:]:
+        parts = arg.split(":")
+        if len(parts) != 2:
+            print(f"Error - invalid parameter '{arg}'")
             continue
-
-        item, amount_str = token.split(":")
-
-        if not item:
-            print(f"Skipping invalid token (empty item name): {token}")
+        if parts[0] in inventory:
+            print(f"Redundant item '{parts[0]}' - discarding")
             continue
-
         try:
-            amount = int(amount_str)
-        except ValueError:
-            print(f"Skipping invalid amount (not an int): {token}")
+            inventory[parts[0]] = int(parts[1])
+        except ValueError as e:
+            print(f"Quantity error for '{parts[0]}': {e}")
             continue
+    return inventory
 
-        if amount < 0:
-            print(f"Skipping invalid amount (negative): {token}")
-            continue
 
-        inventory[item] = inventory.get(item, 0) + amount
+def display_stats(inv: dict) -> None:
+    print(f"Got inventory: {inv}")
+    print(f"Item list: {list(inv.keys())}")
+    total = sum(inv.values())
+    print(f"Total quantity of the {len(inv)} items: {total}")
+    for item, quantity in inv.items():
+        print(f"Item {item} represents {round(quantity / total * 100, 1)}%")
+    most = None
+    least = None
+    for item, quantity in inv.items():
+        if most is None or quantity > inv[most]:
+            most = item
+        if least is None or quantity < inv[least]:
+            least = item
+    print(f"Item most abundant: {most} with quantity {inv[most]}")
+    print(f"Item least abundant: {least} with quantity {inv[least]}")
 
-    
-    total_items = sum(inventory.values())
-    unique_types = len(inventory)
 
-    print(f"Total items in inventory: {total_items}")
-    print(f"Unique item types: {unique_types}")
-    print()
+def main() -> None:
+    print("=== Inventory System Analysis ===")
+    inv = parse_inventory()
+    display_stats(inv)
+    inv.update({"magic_item": 1})
+    print(f"Updated inventory: {inv}")
 
-    
-    print("=== Current Inventory ===")
-    if unique_types == 0:
-        print("(empty)")
-    else:
-        for item, amount in inventory.items():
-            if total_items == 0:
-                pct = 0.0
-            else:
-                pct = (amount / total_items) * 100.0
-            print(f"{item}: {amount} units ({pct:.1f}%)")
-    print()
-    print("=== Inventory Statistics ===")
-    max_item = ""
-    max_value = 0
 
-    for item, value in inventory.items():
-        if value > max_value:
-            max_value = value
-            max_item = item
-    print(f"Most abundant: {max_item} ({max_value} units)")
-    min_item = None
-    min_value = None
-
-    for item, value in inventory.items():
-        if min_value is None or value < min_value:
-            min_value = value
-            min_item = item
-    print(f"Most abundant: {min_item} ({min_value} units)")
-    print()
-    print("=== Item Catagories ===")
-
-    moderate = dict()
-    scarce = dict()
-    for item, value in inventory.items():
-        if value > 4:
-            moderate.update({item: value})
-        else:
-            scarce.update({item: value})
-    
-    print(f"Moderate {moderate}")
-    print(f"Scarce {scarce}")
-    print()
-    print("=== Management Suggestions ===")
-    restock = dict()
-    for item, amount in scarce.items():
-        if amount < 2:
-            restock.update({item: amount})
-    print("Restock needed:", end=" ")
-    for item in restock.keys():
-        print(item, end=", ")
-    print()
-    print()
-    print("=== Dictionary Properties Demo ===")
-    print("Dictionary keys:", end=" ")
-    for item in inventory.keys():
-        print(f"{item}", end=", ")
-    print()
-    print("Directory values", end=" ")
-    for value in inventory.values():
-        print(f"{value}", end=", ")
-    print()
-    print("Sample lookup - 'sword' in inventory:", "sword" in inventory)
 if __name__ == "__main__":
-    main(sys.argv)
+    main()
