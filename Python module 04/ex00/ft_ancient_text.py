@@ -1,20 +1,33 @@
-import os
-def main() -> None:
-    if not os.path.exists("ancient_fragment.txt"):
-        print("ERROR: Storage vault not found. Run data generator first.")
+import sys
+import typing
 
-    print("=== CYBER ARCHIVES - DATA RECOVERY SYSTEM ===")
-    print("Accessing Storage Vault: ancient_fragment.txt")
 
-    file = open("ancient_fragment.txt", "r")
-    print("Connection established...")
-    print("RECOVERED DATA:")
+def read_file(filename: str) -> None:
+    print("=== Cyber Archives Recovery ===")
+    print(f"Accessing file '{filename}'")
 
-    content = file.read()
-    print(content)
+    file: typing.IO
+    try:
+        file = open(filename, "r")
+    except OSError as e:
+        print(f"Error opening file '{filename}': {e}")
+        return
 
+    content: str = file.read()
     file.close()
-    print("Data recovery complete. Storage unit disconnected.")
 
-if __name__== "__main__":
+    print("---")
+    print(content, end="")
+    print("---")
+    print(f"File '{filename}' closed.")
+
+
+def main() -> None:
+    if len(sys.argv) != 2:
+        print("Usage: ft_ancient_text.py <file>")
+        return
+    read_file(sys.argv[1])
+
+
+if __name__ == "__main__":
     main()

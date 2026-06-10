@@ -1,23 +1,36 @@
+def secure_archive(
+    filename: str,
+    mode: str = "r",
+    content: str = ""
+) -> tuple:
+    try:
+        if mode == "r":
+            with open(filename, "r") as file:
+                return (True, file.read())
+        else:
+            with open(filename, "w") as file:
+                file.write(content)
+                return (True, "Content successfully written to file")
+    except OSError as e:
+        return (False, str(e))
+
+
 def main() -> None:
-    read_file = "classified_data.txt"
-    write_file = "security_protocols.txt"
+    print("=== Cyber Archives Security ===")
+
+    print("Using 'secure_archive' to read from a nonexistent file:")
+    print(secure_archive("/not/existing/file"))
+
+    print("Using 'secure_archive' to read from an inaccessible file:")
+    print(secure_archive("/etc/master.passwd"))
+
+    print("Using 'secure_archive' to read from a regular file:")
+    result = secure_archive("ancient_fragment.txt")
+    print(result)
+
+    print("Using 'secure_archive' to write previous content to a new file:")
+    print(secure_archive("output.txt", "w", result[1]))
 
 
-    print("=== CYBER ARCHIVES - VAULT SECURITY SYSTEM ===")
-    print("Initiating secure vault access...")
-    print("Vault connection established with failsafe protocols\n")
-    
-    print("SECURE EXTRACTION:")
-    with open(read_file, "r") as f:
-        content = f.read()
-        print(content, end="")
-    print()
-    print("SECURE PRESERVATION:")
-    with open(write_file, "w") as f:
-        f.write("[CLASSIFIED] New security protocols archived\n")
-        print("[CLASSIFIED] Security protocols inscribed successfully")
-    print("Vault automatically sealed upon completion")
-    print("All vault operations completed with maximum security.")
-
-if __name__== "__main__":
+if __name__ == "__main__":
     main()

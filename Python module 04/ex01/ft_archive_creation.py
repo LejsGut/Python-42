@@ -10,7 +10,7 @@ def read_file(filename: str) -> str:
     try:
         file = open(filename, "r")
     except OSError as e:
-        sys.stderr.write(f"[STDERR] Error opening file '{filename}': {e}\n")
+        print(f"Error opening file '{filename}': {e}")
         return ""
 
     content: str = file.read()
@@ -42,13 +42,12 @@ def write_file(filename: str, content: str) -> None:
         file.close()
         print(f"Data saved in file '{filename}'.")
     except OSError as e:
-        sys.stderr.write(f"[STDERR] Error opening file '{filename}': {e}\n")
-        print("Data not saved.")
+        print(f"Error opening file '{filename}': {e}")
 
 
 def main() -> None:
     if len(sys.argv) != 2:
-        print("Usage: ft_stream_management.py <file>")
+        print("Usage: ft_archive_creation.py <file>")
         return
 
     content: str = read_file(sys.argv[1])
@@ -62,10 +61,7 @@ def main() -> None:
     print(new_content, end="")
     print("---")
 
-    sys.stdout.write("Enter new file name (or empty): ")
-    sys.stdout.flush()
-    filename: str = sys.stdin.readline().rstrip("\n")
-
+    filename: str = input("Enter new file name (or empty): ")
     if filename == "":
         print("Not saving data.")
     else:
