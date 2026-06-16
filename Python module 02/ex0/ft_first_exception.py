@@ -1,19 +1,17 @@
-def input_temperature(temp_str):
-    temp = int(temp_str)
-    return temp
+def input_temperature(temp_str: str) -> int:
+    return int(temp_str)
 
-def test_temperature(temp_str):
+
+def test_temperature(temp_str: str) -> None:
     print(f"Input data is '{temp_str}'")
     try:
         temp = input_temperature(temp_str)
-        print(f"Temperature is now {temp}\u00B0C")
-    except ValueError:
-        print(f"Caught input_temperature error: invalid literal for int() with base 10: '{temp_str}'")
-    except TypeError:
-        print(f"{temp_str} is the wrong datatype")
-    pass
+        print(f"Temperature is now {temp}°C")
+    except ValueError as error:
+        print(f"Caught input_temperature error: {error}")
 
-def main():
+
+def main() -> None:
     print("=== Garden Temperature ===")
     print()
     test_temperature("25")
