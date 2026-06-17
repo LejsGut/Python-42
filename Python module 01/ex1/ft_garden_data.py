@@ -1,0 +1,33 @@
+class Plant:
+    """A model describing any plant in the garden."""
+
+    def __init__(self) -> None:
+        self.name: str = ""
+        self.height: int = 0
+        self.age: int = 0
+
+    def show(self) -> None:
+        print(f"{self.name}: {self.height}cm, {self.age} days old")
+
+
+if __name__ == "__main__":
+    # Instantiate the class, then set the attributes for each plant.
+    rose = Plant()
+    rose.name = "Rose"
+    rose.height = 25
+    rose.age = 30
+
+    sunflower = Plant()
+    sunflower.name = "Sunflower"
+    sunflower.height = 80
+    sunflower.age = 45
+
+    cactus = Plant()
+    cactus.name = "Cactus"
+    cactus.height = 15
+    cactus.age = 120
+
+    print("=== Garden Plant Registry ===")
+    rose.show()
+    sunflower.show()
+    cactus.show()
