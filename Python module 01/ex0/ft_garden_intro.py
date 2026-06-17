@@ -1,14 +1,11 @@
-class Plant:
-    def __init__(self, name, height, age):
-        self.name = name
-        self.height = height
-        self.age = age
-
-
 if __name__ == "__main__":
-    rose = Plant("rose", "15cm", "2 months")
+    # Exercise 0: store the plant information in simple variables.
+    name: str = "Rose"
+    height: int = 25
+    age: int = 30
+
     print("=== Welcome to My Garden ===")
-    print(f"Plant: {rose.name}")
-    print(f"Height: {rose.height}")
-    print(f"Age: {rose.age}")
+    print(f"Plant: {name}")
+    print(f"Height: {height}cm")
+    print(f"Age: {age} days")
     print("=== End of Program ===")

@@ -1,44 +1,63 @@
 class Plant:
-    def __init__(self, name, age, height, how_many):
+    """A plant that protects its data through encapsulation.
+
+    Height and age are kept in "protected" attributes (single leading
+    underscore convention, not name mangling) and can only be modified
+    through validated setters.
+    """
+
+    def __init__(self, name: str, height: float, age: int) -> None:
         self.name = name
-        self.age = age
-        self.height = height
-        self.how_many = how_many
+        self._height: float = float(height) if height >= 0 else 0.0
+        self._age: int = age if age >= 0 else 0
 
-    def check_height(self):
-        if Rose.height < 1:
-            print(
-                f"Invalid operation attempted: height"
-                f" {Rose.height} [REJECTED]"
-            )
-            print("Security: Negative height rejected")
-        else:
-            print(f"Height updated: {Rose.height}cm [OK]")
+    def get_height(self) -> float:
+        return self._height
 
-    def check_age(self):
-        if Rose.age < 1:
-            print(f"Invalid operation attempted: age {Rose.age} [REJECTED]")
-            print("Security: Negative age or null age rejected")
-        else:
-            print(f"Age updated: {Rose.age} days [OK]")
+    def get_age(self) -> int:
+        return self._age
 
-    def info(self):
-        print(
-            f"Current Plant: {self.name} ({self.height}cm, "
-            f"{self.age} days)"
-        )
+    def set_height(self, height: float) -> bool:
+        if height < 0:
+            print(f"{self.name}: Error, height can't be negative")
+            return False
+        self._height = float(height)
+        print(f"Height updated: {height}cm")
+        return True
 
-    def plant_created(self):
-        print(f"Plant created: {self.name}")
+    def set_age(self, age: int) -> bool:
+        if age < 0:
+            print(f"{self.name}: Error, age can't be negative")
+            return False
+        self._age = age
+        print(f"Age updated: {age} days")
+        return True
+
+    def show(self) -> None:
+        print(f"{self.name}: {round(self._height, 1)}cm, "
+              f"{self._age} days old")
 
 
-count = 0
-Rose = Plant("Rose", -1, 1, 1)
-plants = [Rose]
-print("=== Garden Security System ===")
-while count < Rose.how_many:
-    plants[count].plant_created()
-    Rose.check_height()
-    Rose.check_age()
-    Rose.info()
-    count += 1
+def main() -> None:
+    print("=== Garden Security System ===")
+    rose = Plant("Rose", 15, 10)
+    print("Plant created: ", end="")
+    rose.show()
+    print()
+
+    rose.set_height(25)
+    rose.set_age(30)
+    print()
+
+    if not rose.set_height(-5):
+        print("Height update rejected")
+    if not rose.set_age(-3):
+        print("Age update rejected")
+    print()
+
+    print("Current state: ", end="")
+    rose.show()
+
+
+if __name__ == "__main__":
+    main()

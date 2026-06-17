@@ -1,139 +1,210 @@
-class Gardenmanager:
-    def __init__(self, gardener):
-        self.gardener = gardener
+class Plant:
+    """Common features plus a nested statistics tracker."""
 
-    def garden_score(self, start_node):
-        current = start_node
-        score = 0
-        while current is not None and current.gardener == self.gardener:
-            if current.bloom is True and current.prize == 0:
-                score += 100
-            elif current.bloom is True and current.prize > 0:
-                score += 10
-            else:
-                score += 20
-            current = current.next
-        return score
+    class _Stats:
+        """Encapsulated statistics for a single plant."""
 
-    def grow(self):
-        growth = self.increase
-        self.height += growth
-        return growth
+        def __init__(self) -> None:
+            self._grow_calls = 0
+            self._age_calls = 0
+            self._show_calls = 0
 
-    def validate_height(self):
-        if self.height < 0:
-            return False
-        return True
+        def record_grow(self) -> None:
+            self._grow_calls += 1
 
-    def gardens_managed(self, start_node, gardener):
-        count = 0
-        current = start_node
-        if current is None or current.gardener:
-            count += 1
-        while current is not None and current.gardener == gardener:
-            if current.gardener == self.gardener:
-                current = current.next
-        if current is not current.gardener:
-            count += 1
-            return count
+        def record_age(self) -> None:
+            self._age_calls += 1
 
+        def record_show(self) -> None:
+            self._show_calls += 1
 
-class Node:
-    def __init__(
-        self, gardener, name, manager, bloom, prize, height, increase
-    ):
-        self.gardener = gardener
+        def display(self) -> None:
+            print(f"Stats: {self._grow_calls} grow, "
+                  f"{self._age_calls} age, {self._show_calls} show")
+
+    def __init__(self, name: str, height: float, age: int,
+                 growth_rate: float = 1.0) -> None:
         self.name = name
-        self.manager = manager
-        self.bloom = bloom
-        self.prize = prize
-        self.height = height
-        self.increase = increase
-        self.next = None
+        self._height: float = float(height) if height >= 0 else 0.0
+        self._age: int = age if age >= 0 else 0
+        self._growth_rate = growth_rate
+        self._stats = self._create_stats()
+
+    def _create_stats(self) -> "Plant._Stats":
+        return Plant._Stats()
+
+    @staticmethod
+    def is_older_than_year(age: int) -> bool:
+        return age > 365
+
+    @classmethod
+    def create_anonymous(cls) -> "Plant":
+        return cls("Unknown plant", 0, 0)
+
+    def grow(self) -> None:
+        self._stats.record_grow()
+        self._height += self._growth_rate
+
+    def age(self, days: int = 1) -> None:
+        self._stats.record_age()
+        self._age += days
+
+    def show(self) -> None:
+        self._stats.record_show()
+        print(f"{self.name}: {round(self._height, 1)}cm, "
+              f"{self._age} days old")
+
+    def display_stats(self) -> None:
+        self._stats.display()
 
 
-node1 = Node("Alice", "Oak Tree", Gardenmanager("Alice"), False, 0, 1, 1)
-node2 = Node("Alice", "Rose", Gardenmanager("Alice"), True, 0, 1, 1)
-node3 = Node("Alice", "Sunflower", Gardenmanager("Alice"), True, 10, 1, 1)
-node4 = Node("Bob", "Pine Tree", Gardenmanager("Bob"), False, 0, 1, 1)
-node5 = Node("Bob", "Daisy", Gardenmanager("Bob"), True, 0, 1, 1)
-node6 = Node("Bob", "Tulip", Gardenmanager("Bob"), True, 0, 1, 1)
+class Flower(Plant):
+    """A plant with a color that can bloom()."""
+
+    def __init__(self, name: str, height: float, age: int,
+                 color: str, growth_rate: float = 1.0) -> None:
+        super().__init__(name, height, age, growth_rate)
+        self.color = color
+        self._bloomed = False
+
+    def bloom(self) -> None:
+        self._bloomed = True
+
+    def show(self) -> None:
+        super().show()
+        print(f" Color: {self.color}")
+        if self._bloomed:
+            print(f" {self.name} is blooming beautifully!")
+        else:
+            print(f" {self.name} has not bloomed yet")
 
 
-node1.next = node2
-node2.next = node3
-node3.next = node4
-node4.next = node5
-node5.next = node6
+class Tree(Plant):
+    """A plant that can produce_shade() and tracks the shade calls."""
+
+    class _Stats(Plant._Stats):
+        def __init__(self) -> None:
+            super().__init__()
+            self._shade_calls = 0
+
+        def record_shade(self) -> None:
+            self._shade_calls += 1
+
+        def display(self) -> None:
+            super().display()
+            print(f" {self._shade_calls} shade")
+
+    def __init__(self, name: str, height: float, age: int,
+                 trunk_diameter: float, growth_rate: float = 1.0) -> None:
+        super().__init__(name, height, age, growth_rate)
+        self.trunk_diameter = float(trunk_diameter)
+
+    def _create_stats(self) -> "Tree._Stats":
+        return Tree._Stats()
+
+    def produce_shade(self) -> None:
+        stats = self._stats
+        if isinstance(stats, Tree._Stats):
+            stats.record_shade()
+        print(f"Tree {self.name} now produces a shade of "
+              f"{round(self._height, 1)}cm long and "
+              f"{round(self.trunk_diameter, 1)}cm wide.")
+
+    def show(self) -> None:
+        super().show()
+        print(f" Trunk diameter: {round(self.trunk_diameter, 1)}cm")
 
 
-print("=== Garden Management System Demo ===\n")
+class Vegetable(Plant):
+    """A plant whose nutritional value rises as it grows and ages."""
+
+    def __init__(self, name: str, height: float, age: int,
+                 harvest_season: str, growth_rate: float = 1.0) -> None:
+        super().__init__(name, height, age, growth_rate)
+        self.harvest_season = harvest_season
+        self._nutritional_value: float = 0.0
+
+    def grow(self) -> None:
+        super().grow()
+        self._nutritional_value += 0.5
+
+    def age(self, days: int = 1) -> None:
+        super().age(days)
+        self._nutritional_value += 0.5 * days
+
+    def show(self) -> None:
+        super().show()
+        print(f" Harvest season: {self.harvest_season}")
+        print(f" Nutritional value: {round(self._nutritional_value)}")
 
 
-current = node1
-while current is not None:
-    print(f"Added {current.name} to {current.gardener}'s garden")
-    current = current.next
+class Seed(Flower):
+    """A flower that holds its seed count once it has bloomed."""
 
-print("\nAlice is helping all plants grow...")
+    def __init__(self, name: str, height: float, age: int,
+                 color: str, growth_rate: float = 1.0) -> None:
+        super().__init__(name, height, age, color, growth_rate)
+        self._seed_count = 0
+
+    def bloom(self) -> None:
+        super().bloom()
+        self._seed_count = 42
+
+    def show(self) -> None:
+        super().show()
+        print(f" Seeds: {self._seed_count}")
 
 
-current = node1
-while current is not None and current.gardener == "Alice":
-    growth = Gardenmanager.grow(current)
-    print(f"{current.name} grew {growth}cm (now {current.height}cm)")
-    current = current.next
+def display_statistics(plant: Plant) -> None:
+    """Display statistics for any kind of plant."""
+    print(f"[statistics for {plant.name}]")
+    plant.display_stats()
 
-print("\n=== Alice's Garden Report ===")
-print("Plants in garden:")
 
-current = node1
-total_plants = 0
-total_growth = 0
-regular_count = 0
-flowering_count = 0
-prize_count = 0
+def main() -> None:
+    print("=== Garden statistics ===")
 
-while current is not None and current.gardener == "Alice":
-    total_plants += 1
-    total_growth += current.increase
+    print("=== Check year-old")
+    print(f"Is 30 days more than a year? -> {Plant.is_older_than_year(30)}")
+    print(f"Is 400 days more than a year? -> {Plant.is_older_than_year(400)}")
+    print()
 
-    if current.bloom and current.prize > 0:
-        prize_count += 1
-        print(
-            f"- {current.name}: {current.height}cm, yellow flowers (blooming),"
-            f"Prize points: {current.prize}"
-        )
-    elif current.bloom:
-        flowering_count += 1
-        print(f"- {current.name}: {current.height}cm, red flowers (blooming)")
-    else:
-        regular_count += 1
-        print(f"- {current.name}: {current.height}cm")
+    print("=== Flower")
+    rose = Flower("Rose", 15, 10, "red", growth_rate=8.0)
+    rose.show()
+    display_statistics(rose)
+    print("[asking the rose to grow and bloom]")
+    rose.grow()
+    rose.bloom()
+    rose.show()
+    display_statistics(rose)
+    print()
 
-    current = current.next
+    print("=== Tree")
+    oak = Tree("Oak", 200, 365, 5.0)
+    oak.show()
+    display_statistics(oak)
+    print("[asking the oak to produce shade]")
+    oak.produce_shade()
+    display_statistics(oak)
+    print()
 
-print(f"\nPlants added: {total_plants}, Total growth: {total_growth}cm")
-print(
-    f"Plant types: {regular_count} regular, "
-    f"{flowering_count} flowering, {prize_count} prize flowers"
-)
+    print("=== Seed")
+    sunflower = Seed("Sunflower", 80, 45, "yellow", growth_rate=30.0)
+    sunflower.show()
+    print("[make sunflower grow, age and bloom]")
+    sunflower.grow()
+    sunflower.age(20)
+    sunflower.bloom()
+    sunflower.show()
+    display_statistics(sunflower)
+    print()
 
-current = node1
-height_valid = True
-while current is not None and current.gardener == "Alice":
-    if not Gardenmanager.validate_height(current):
-        height_valid = False
-        break
-    current = current.next
-print(f"Height validation test: {height_valid}")
+    print("=== Anonymous")
+    unknown = Plant.create_anonymous()
+    unknown.show()
+    display_statistics(unknown)
 
-alice_manager = Gardenmanager("Alice")
-bob_manager = Gardenmanager("Bob")
 
-alice_score = alice_manager.garden_score(node1)
-bob_score = bob_manager.garden_score(node4)
-
-print(f"\nGarden scores - Alice: {alice_score}, Bob: {bob_score}")
-
-print(f"Total gardens managed: {alice_manager.gardens_managed(node1)}")
+if __name__ == "__main__":
+    main()

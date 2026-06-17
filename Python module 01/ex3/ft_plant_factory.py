@@ -1,29 +1,38 @@
 class Plant:
-    def __init__(self, name, starting_height, starting_age, amount_plants):
+    """A plant created and initialized in a single step (__init__)."""
+
+    def __init__(self, name: str, height: float, age: int,
+                 growth_rate: float = 1.0) -> None:
         self.name = name
-        self.starting_height = starting_height
-        self.starting_age = starting_age
-        self.amount_plants = amount_plants
+        self.height = float(height)
+        self.day = age
+        self.growth_rate = growth_rate
 
-    def info(self):
-        print(f"Created: {self.name} ({self.starting_height}cm, "
-              f"{self.starting_age} days)")
+    def grow(self) -> None:
+        self.height += self.growth_rate
 
-    def how_many_created(self):
-        print(f"Total plants created: {count}")
+    def age(self) -> None:
+        self.day += 1
+
+    def show(self) -> None:
+        print(f"{self.name}: {round(self.height, 1)}cm, "
+              f"{self.day} days old")
 
 
-Rose = Plant("Rose", 25, 30, 5)
-Oak = Plant("Oak", 200, 365, 5)
-Cactus = Plant("Cactus", 5, 90, 5)
-Sunflower = Plant("Sunflower", 80, 45, 5)
-Fern = Plant("Fern", 15, 120, 5)
+def main() -> None:
+    plants = [
+        Plant("Rose", 25, 30),
+        Plant("Oak", 200, 365),
+        Plant("Cactus", 5, 90),
+        Plant("Sunflower", 80, 45),
+        Plant("Fern", 15, 120),
+    ]
 
-print("=== Plant Factory Output ===")
-plants = [Rose, Oak, Cactus, Sunflower, Fern]
-count = 0
-while count < Rose.amount_plants:
-    plants[count].info()
-    count += 1
-print("")
-Rose.how_many_created()
+    print("=== Plant Factory Output ===")
+    for plant in plants:
+        print("Created: ", end="")
+        plant.show()
+
+
+if __name__ == "__main__":
+    main()

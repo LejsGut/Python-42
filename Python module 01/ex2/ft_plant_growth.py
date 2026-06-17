@@ -1,36 +1,44 @@
 class Plant:
-    def __init__(self, name, height, age, grow, grow_day):
-        self.name = name
-        self.height = height
-        self.age = age
-        self.grow = grow
-        self.grow_day = grow_day
+    """A plant that can grow() and age() over time.
 
-    def growing(self):
-        self.height += self.grow
+    The age value is stored in ``day`` (instead of ``age``) so the class
+    can also expose an ``age()`` method: an attribute and a method may
+    not share the same name on an instance.
+    """
 
-    def aging(self):
-        self.age += 1
+    def __init__(self) -> None:
+        self.name: str = ""
+        self.height: float = 0.0
+        self.day: int = 0
+        self.growth_rate: float = 0.0
 
-    def info(self):
-        print(f"{self.name}: {self.height}cm, {self.age} days old")
+    def grow(self) -> None:
+        self.height += self.growth_rate
+
+    def age(self) -> None:
+        self.day += 1
+
+    def show(self) -> None:
+        print(f"{self.name}: {round(self.height, 1)}cm, "
+              f"{self.day} days old")
 
 
 def main() -> None:
-    rose = Plant("Rose", 25, 30, 2, 7)
-    day_count = 1
-    while day_count <= rose.grow_day:
-        if day_count == 1 or day_count == rose.grow_day:
-            print(f"=== Day {day_count} ===")
-            rose.info()
-            if day_count == rose.grow_day:
-                print(
-                    f"Growth this week: +"
-                    f"{rose.grow * rose.grow_day - rose.grow}cm"
-                )
-        rose.growing()
-        rose.aging()
-        day_count += 1
+    rose = Plant()
+    rose.name = "Rose"
+    rose.height = 25.0
+    rose.day = 30
+    rose.growth_rate = 0.8
+
+    start_height = rose.height
+    print("=== Garden Plant Growth ===")
+    for day in range(1, 8):
+        print(f"=== Day {day} ===")
+        rose.show()
+        rose.grow()
+        rose.age()
+
+    print(f"Growth this week: {round(rose.height - start_height)}cm")
 
 
 if __name__ == "__main__":

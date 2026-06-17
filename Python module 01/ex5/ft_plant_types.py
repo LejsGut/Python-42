@@ -1,68 +1,112 @@
 class Plant:
-    def __init__(self, name, height, age):
-        self.name = name
-        self.height = height
-        self.age = age
+    """Common features shared by every kind of plant."""
 
-    def info(self):
-        print(
-            f"{self.name} ({self.__class__.__name__}): "
-            f"{self.height}cm, {self.age} days, ",
-            end="",
-        )
+    def __init__(self, name: str, height: float, age: int,
+                 growth_rate: float = 1.0) -> None:
+        self.name = name
+        self._height: float = float(height) if height >= 0 else 0.0
+        self._age: int = age if age >= 0 else 0
+        self._growth_rate = growth_rate
+
+    def grow(self) -> None:
+        self._height += self._growth_rate
+
+    def age(self) -> None:
+        self._age += 1
+
+    def show(self) -> None:
+        print(f"{self.name}: {round(self._height, 1)}cm, "
+              f"{self._age} days old")
 
 
 class Flower(Plant):
+    """A plant with a color that can bloom()."""
 
-    def __init__(self, name, height, age, colour):
-        super().__init__(name, height, age)
-        self.colour = colour
+    def __init__(self, name: str, height: float, age: int,
+                 color: str, growth_rate: float = 1.0) -> None:
+        super().__init__(name, height, age, growth_rate)
+        self.color = color
+        self._bloomed = False
 
-    def info(self):
-        super().info()
-        print(f"{self.colour}")
-        print(f"{self.name} is blooming beautifully!")
+    def bloom(self) -> None:
+        self._bloomed = True
 
-
-class Vegetable(Plant):
-    def __init__(self, name, height, age, harvest_season, nutritional_value):
-        super().__init__(name, height, age)
-        self.harvest_season = harvest_season
-        self.nutritional_value = nutritional_value
-
-    def info(self):
-        super().info()
-        print(f"{self.harvest_season}")
-        print(f"{self.name} {self.nutritional_value}")
+    def show(self) -> None:
+        super().show()
+        print(f" Color: {self.color}")
+        if self._bloomed:
+            print(f" {self.name} is blooming beautifully!")
+        else:
+            print(f" {self.name} has not bloomed yet")
 
 
 class Tree(Plant):
-    def __init__(self, name, height, age, trunk_diameter, shade):
-        super().__init__(name, height, age)
-        self.trunk_diameter = trunk_diameter
-        self.shade = shade
+    """A plant with a trunk diameter that can produce_shade()."""
 
-    def info(self):
-        super().info()
-        print(f"{self.trunk_diameter}cm diameter")
-        print(f"{self.name} provides {self.shade} square " "meters of shade")
+    def __init__(self, name: str, height: float, age: int,
+                 trunk_diameter: float, growth_rate: float = 1.0) -> None:
+        super().__init__(name, height, age, growth_rate)
+        self.trunk_diameter = float(trunk_diameter)
+
+    def produce_shade(self) -> None:
+        print(f"Tree {self.name} now produces a shade of "
+              f"{round(self._height, 1)}cm long and "
+              f"{round(self.trunk_diameter, 1)}cm wide.")
+
+    def show(self) -> None:
+        super().show()
+        print(f" Trunk diameter: {round(self.trunk_diameter, 1)}cm")
+
+
+class Vegetable(Plant):
+    """A plant whose nutritional value rises as it grows and ages."""
+
+    def __init__(self, name: str, height: float, age: int,
+                 harvest_season: str, growth_rate: float = 1.0) -> None:
+        super().__init__(name, height, age, growth_rate)
+        self.harvest_season = harvest_season
+        self._nutritional_value: float = 0.0
+
+    def grow(self) -> None:
+        super().grow()
+        self._nutritional_value += 0.5
+
+    def age(self) -> None:
+        super().age()
+        self._nutritional_value += 0.5
+
+    def show(self) -> None:
+        super().show()
+        print(f" Harvest season: {self.harvest_season}")
+        print(f" Nutritional value: {round(self._nutritional_value)}")
 
 
 def main() -> None:
-    Rose = Flower("Rose", 25, 30, "red colour")
-    Tulip = Flower("Tulip", 30, 35, "yellow colour")
-
-    Tomato = Vegetable("Tomato", 80, 90, "summer harvest", "has salt")
-    Cucumber = Vegetable("Cucumber", 60, 85, "summer harvest", "has no salt")
-
-    Oak = Tree("Oak", 500, 1825, 50, 5)
-    Pine = Tree("Pine", 300, 1200, 40, 5)
-
     print("=== Garden Plant Types ===")
-    plants = [Tomato, Cucumber, Rose, Tulip, Oak, Pine]
-    for plant in plants:
-        plant.info()
-        print()
+
+    print("=== Flower")
+    rose = Flower("Rose", 15, 10, "red")
+    rose.show()
+    print("[asking the rose to bloom]")
+    rose.bloom()
+    rose.show()
+    print()
+
+    print("=== Tree")
+    oak = Tree("Oak", 200, 365, 5.0)
+    oak.show()
+    print("[asking the oak to produce shade]")
+    oak.produce_shade()
+    print()
+
+    print("=== Vegetable")
+    tomato = Vegetable("Tomato", 5, 10, "April", growth_rate=2.1)
+    tomato.show()
+    print("[make tomato grow and age for 20 days]")
+    for _ in range(20):
+        tomato.grow()
+        tomato.age()
+    tomato.show()
 
 
 if __name__ == "__main__":
